@@ -1,0 +1,14 @@
+{{- if .Values.kubeflow.modelDeployment.enabled }}
+apiVersion: serving.kubeflow.org/v1beta1
+kind: InferenceService
+metadata:
+  name: {{ include "kubeflow-pipeline.fullname" . }}-inferenceservice
+spec:
+  predictor:
+    tensorflow:
+      storageUri: "s3://{{ .Values.aws.s3.artifactsBucket }}/model"
+      resources:
+        requests:
+          cpu: 1
+          memory: 2Gi
+{{- end }}

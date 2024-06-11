@@ -1,0 +1,39 @@
+{{- if .Values.kubeflow.hyperparameterTuning.enabled }}
+apiVersion: kubeflow.org/v1alpha3
+kind: Experiment
+metadata:
+  name: {{ include "kubeflow-pipeline.fullname" . }}-katib
+spec:
+  objective:
+    type: maximize
+    goal: 0.99
+    objectiveMetricName: accuracy
+  algorithm:
+    algorithmName: random
+  parameters:
+    - name: --lr
+      parameterType: double
+      feasibleSpace:
+        min: "0.01"
+        max: "0.1"
+  trialTemplate:
+    primaryContainerName: training-container
+    trialParameters:
+      - name: learningRate
+        description: Learning rate
+        reference: lr
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          spec:
+            containers:
+              - name: training-container
+                image: tensorflow/tensorflow:latest
+                command:
+                  - "python"
+                  - "/opt/train.py"
+                  - "--lr=${trialParameters.learningRate}"
+            restartPolicy: Never
+{{- end }}

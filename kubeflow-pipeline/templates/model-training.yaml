@@ -1,0 +1,16 @@
+{{- if .Values.kubeflow.modelTraining.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "kubeflow-pipeline.fullname" . }}-training
+spec:
+  template:
+    spec:
+      containers:
+        - name: training
+          image: your-docker-repo/training
+          command:
+            - "python"
+            - "/opt/train.py"
+      restartPolicy: OnFailure
+{{- end }}

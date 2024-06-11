@@ -1,0 +1,26 @@
+{{- if .Values.kubeflow.automation.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: {{ include "kubeflow-pipeline.fullname" . }}-workflow-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: preprocess
+            template: preprocess
+        - - name: train
+            template: train
+        - - name: deploy
+            template: deploy
+    - name: preprocess
+      container:
+        image: your-docker-repo/preprocess
+    - name: train
+      container:
+        image: your-docker-repo/train
+    - name: deploy
+      container:
+        image: your-docker-repo/deploy
+{{- end }}

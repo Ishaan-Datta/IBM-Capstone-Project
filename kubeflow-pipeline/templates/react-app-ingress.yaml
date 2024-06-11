@@ -1,0 +1,20 @@
+{{- if .Values.reactApp.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: {{ .Values.reactApp.ingress.hosts[0].host }}
+      http:
+        paths:
+          - path: {{ .Values.reactApp.ingress.hosts[0].paths[0] }}
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: react-app
+                port:
+                  number: 80
+{{- end }}

@@ -1,0 +1,26 @@
+{{- if .Values.kubeflow.distributedTraining.enabled }}
+apiVersion: kubeflow.org/v1
+kind: TFJob
+metadata:
+  name: {{ include "kubeflow-pipeline.fullname" . }}-tfjob
+spec:
+  tfReplicaSpecs:
+    Worker:
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        spec:
+          containers:
+            - name: tensorflow
+              image: tensorflow/tensorflow:latest
+              command:
+                - "python"
+                - "/opt/train.py"
+              volumeMounts:
+                - name: csv-data
+                  mountPath: /data
+          volumes:
+            - name: csv-data
+              persistentVolumeClaim:
+                claimName: csv-pvc
+{{- end }}

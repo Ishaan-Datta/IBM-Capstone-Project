@@ -1,0 +1,16 @@
+{{- if .Values.kubeflow.modelEvaluation.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "kubeflow-pipeline.fullname" . }}-evaluation
+spec:
+  template:
+    spec:
+      containers:
+        - name: evaluation
+          image: your-docker-repo/evaluation
+          command:
+            - "python"
+            - "/opt/evaluate.py"
+      restartPolicy: OnFailure
+{{- end }}

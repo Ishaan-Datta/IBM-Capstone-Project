@@ -1,0 +1,99 @@
+image:
+  repository: your-docker-repo/kubeflow-pipeline
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: example.com
+      paths: ["/"]
+  tls: []
+  
+config:
+  # Your custom configuration for the Kubeflow pipeline
+
+image:
+  repository: your-docker-repo/kubeflow-pipeline
+  tag: latest
+
+service:
+  type: LoadBalancer
+
+ingress:
+  enabled: true
+  hosts:
+    - host: pipeline.example.com
+      paths:
+        - /
+
+# S3 buckets and other AWS configurations
+aws:
+  s3:
+    csvBucket: csv-files-bucket
+    artifactsBucket: kubeflow-bucket
+
+eks:
+  clusterName: eks-cluster
+
+# Configure Kubeflow components
+kubeflow:
+  distributedTraining:
+    enabled: true
+    # Add any specific configuration for distributed training
+  hyperparameterTuning:
+    enabled: true
+    # Add any specific configuration for hyperparameter tuning
+  modelDeployment:
+    enabled: true
+    # Add any specific configuration for model deployment
+  metadataManagement:
+    enabled: true
+    # Add any specific configuration for metadata management
+  automation:
+    enabled: true
+    # Add any specific configuration for automation
+  versionControl:
+    enabled: true
+    # Add any specific configuration for version control
+  dataPreparation:
+    enabled: true
+    # Add any specific configuration for data preparation
+  modelTraining:
+    enabled: true
+    # Add any specific configuration for model training
+  modelEvaluation:
+    enabled: true
+    # Add any specific configuration for model evaluation
+
+golangApi:
+  image:
+    repository: your-docker-repo/golang-api
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 8080
+  ingress:
+    enabled: true
+    hosts:
+      - host: api.example.com
+        paths:
+          - /
+
+reactApp:
+  image:
+    repository: your-docker-repo/react-app
+    tag: latest
+  service:
+    type: LoadBalancer
+  ingress:
+    enabled: true
+    hosts:
+      - host: app.example.com
+        paths:
+          - /

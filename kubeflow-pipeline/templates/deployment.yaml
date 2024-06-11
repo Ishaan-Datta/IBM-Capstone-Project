@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeflow-pipeline
+  labels:
+    app: kubeflow-pipeline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubeflow-pipeline
+  template:
+    metadata:
+      labels:
+        app: kubeflow-pipeline
+    spec:
+      containers:
+        - name: kubeflow-pipeline
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: kubeflow-pipeline-config
+            - secretRef:
+                name: kubeflow-pipeline-secret
